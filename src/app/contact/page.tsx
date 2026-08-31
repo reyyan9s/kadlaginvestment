@@ -115,9 +115,10 @@ export default function ContactPage() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/kadlaginvestment"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="Kadlag Investment on Instagram"
                     className="w-11 h-11 rounded-full bg-accent text-black flex items-center justify-center hover:scale-110 hover:bg-accent-light transition-all shadow-md"
                   >
                     <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
