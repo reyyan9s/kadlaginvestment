@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
@@ -123,210 +123,158 @@ export default function Trust() {
 }
 
 function TestimonialSlider() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const total = TESTIMONIALS.length; // 9
+  // 3 sets of items for seamless circular wrapping
+  const items = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS];
   
-  const duplicatedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
-  const actualLength = TESTIMONIALS.length;
+  const [index, setIndex] = useState(total); // Start at middle set (index 9)
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const scrollNext = () => {
-    setCurrentIndex((prev) => {
-      const isMobile = window.innerWidth < 768;
-      // We can scroll all the way into the second set
-      const maxIndex = isMobile ? actualLength * 2 - 1 : actualLength * 2 - 2;
-      const next = prev >= maxIndex ? 0 : prev + 1;
-      
-      if (scrollRef.current) {
-        const itemWidth = scrollRef.current.children[0].clientWidth;
-        const gap = isMobile ? 24 : 32;
-        
-        // If we jump from the very end to the start, do it instantly to avoid rewind
-        if (next === 0) {
-          scrollRef.current.scrollTo({ left: 0, behavior: 'auto' });
-        } else {
-          scrollRef.current.scrollTo({ left: next * (itemWidth + gap), behavior: 'smooth' });
-          
-          // Seamless loop trick: If we just scrolled into the exact duplicate of the first slide,
-          // wait for the smooth scroll to finish, then instantly snap back to the REAL first slide.
-          if (next === actualLength) {
-             setTimeout(() => {
-               if (scrollRef.current) {
-                 scrollRef.current.scrollTo({ left: 0, behavior: 'auto' });
-                 setCurrentIndex(0);
-               }
-             }, 600); // Wait for smooth scroll animation to finish
-          }
-        }
-      }
-      return next === actualLength ? 0 : next;
-    });
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const nextSlide = () => {
+    setIsTransitioning(true);
+    setIndex((prev) => prev + 1);
   };
 
-  const scrollPrev = () => {
-    setCurrentIndex((prev) => {
-      const isMobile = window.innerWidth < 768;
-      const maxIndex = isMobile ? actualLength * 2 - 1 : actualLength * 2 - 2;
-      
-      if (scrollRef.current) {
-        const itemWidth = scrollRef.current.children[0].clientWidth;
-        const gap = isMobile ? 24 : 32;
-        
-        // If we are at 0 and want to go prev, instantly jump to the second set, then smooth scroll back
-        if (prev === 0) {
-          const jumpIndex = actualLength;
-          scrollRef.current.scrollTo({ left: jumpIndex * (itemWidth + gap), behavior: 'auto' });
-          
-          setTimeout(() => {
-            if (scrollRef.current) {
-              const next = jumpIndex - 1;
-              scrollRef.current.scrollTo({ left: next * (itemWidth + gap), behavior: 'smooth' });
-              setCurrentIndex(next);
-            }
-          }, 50);
-          return jumpIndex - 1;
-        } else {
-          const next = prev - 1;
-          scrollRef.current.scrollTo({ left: next * (itemWidth + gap), behavior: 'smooth' });
-          return next;
-        }
-      }
-      return prev;
-    });
+  const prevSlide = () => {
+    setIsTransitioning(true);
+    setIndex((prev) => prev - 1);
   };
 
-  // 4s Autoplay
+  const goToSlide = (targetIndex: number) => {
+    setIsTransitioning(true);
+    setIndex(total + targetIndex);
+  };
+
+  // Seamless invisible reset at boundary
+  const handleAnimationComplete = () => {
+    if (index >= total * 2) {
+      setIsTransitioning(false);
+      setIndex(index - total);
+    } else if (index < total) {
+      setIsTransitioning(false);
+      setIndex(index + total);
+    }
+  };
+
+  // 5s Autoplay with pause on hover
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
-      scrollNext();
-    }, 4000);
+      nextSlide();
+    }, 5000);
     return () => clearInterval(timer);
   }, [isHovered]);
 
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const isMobile = window.innerWidth < 768;
-    const itemWidth = scrollRef.current.children[0].clientWidth;
-    const gap = isMobile ? 24 : 32;
-    const index = Math.round(scrollRef.current.scrollLeft / (itemWidth + gap));
-    // Only update visual dot index for the first set
-    setCurrentIndex(index % actualLength);
-  };
-
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const onMouseDown = (e: React.MouseEvent) => {
-    if (!scrollRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - scrollRef.current.offsetLeft);
-    setScrollLeft(scrollRef.current.scrollLeft);
-  };
-
-  const onMouseLeave = () => {
-    setIsDragging(false);
-    setIsHovered(false);
-  };
-
-  const onMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2; 
-    scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const maxDots = typeof window !== 'undefined' && window.innerWidth < 768 
-    ? actualLength 
-    : actualLength - 1;
-
-  // Use modulo for dot highlighting so duplicates highlight the correct dot
-  const visualIndex = currentIndex % actualLength;
+  // Visual dot index
+  const activeDotIndex = ((index % total) + total) % total;
 
   return (
-    <div 
-      className="max-w-7xl mx-auto relative px-6 md:px-16"
+    <div
+      className="max-w-7xl mx-auto relative px-4 sm:px-6 md:px-16"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={onMouseLeave}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Navigation Arrows */}
-      <button 
-        onClick={scrollPrev}
-        className="absolute left-0 top-1/2 -translate-y-[calc(50%+24px)] w-12 h-12 rounded-full border border-white/10 bg-white/5 items-center justify-center hover:bg-white/10 transition-colors z-20 hidden md:flex"
+      <button
+        onClick={prevSlide}
+        aria-label="Previous testimonial"
+        className="absolute left-0 top-1/2 -translate-y-[calc(50%+24px)] w-12 h-12 rounded-full border border-white/10 bg-white/5 items-center justify-center hover:bg-white/15 text-white/70 hover:text-white transition-all z-20 hidden md:flex cursor-pointer shadow-lg"
       >
-        <ChevronLeft className="w-5 h-5 text-white/70" />
+        <ChevronLeft className="w-5 h-5" />
       </button>
 
-      <button 
-        onClick={scrollNext}
-        className="absolute right-0 top-1/2 -translate-y-[calc(50%+24px)] w-12 h-12 rounded-full border border-white/10 bg-white/5 items-center justify-center hover:bg-white/10 transition-colors z-20 hidden md:flex"
+      <button
+        onClick={nextSlide}
+        aria-label="Next testimonial"
+        className="absolute right-0 top-1/2 -translate-y-[calc(50%+24px)] w-12 h-12 rounded-full border border-white/10 bg-white/5 items-center justify-center hover:bg-white/15 text-white/70 hover:text-white transition-all z-20 hidden md:flex cursor-pointer shadow-lg"
       >
-        <ChevronRight className="w-5 h-5 text-white/70" />
+        <ChevronRight className="w-5 h-5" />
       </button>
 
-      <div className="max-w-6xl mx-auto overflow-hidden relative">
-        <div 
-          ref={scrollRef}
-          onScroll={handleScroll}
-          onMouseDown={onMouseDown}
-          onMouseUp={onMouseUp}
-          onMouseMove={onMouseMove}
-          className={`flex gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-hide ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      {/* Continuous Sliding Window */}
+      <div className="max-w-6xl mx-auto overflow-hidden">
+        <motion.div
+          animate={{
+            x: isMobile
+              ? `-${index * 100}%`
+              : `-${index * 50}%`,
+          }}
+          transition={
+            isTransitioning
+              ? { duration: 0.5, ease: [0.25, 1, 0.5, 1] }
+              : { duration: 0 }
+          }
+          onAnimationComplete={handleAnimationComplete}
+          className="flex"
         >
-          {duplicatedTestimonials.map((testimonial, idx) => (
-            <div 
+          {items.map((testimonial, idx) => (
+            <div
               key={idx}
-              className="w-full md:w-[calc(50%-16px)] shrink-0 snap-start p-8 md:p-10 rounded-3xl bg-white/[0.02] border border-white/5 relative group hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-between"
+              className="w-full md:w-1/2 shrink-0 p-3 sm:p-4"
             >
-              <div>
-                <div className="flex items-center gap-1 mb-8">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-accent fill-accent pointer-events-none" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  ))}
-                </div>
-                <p className="text-foreground/80 leading-relaxed font-light mb-12 pointer-events-none">
-                  "{testimonial.quote}"
-                </p>
-              </div>
-              <div className="flex items-center gap-4 mt-auto pointer-events-none">
-                <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-bold font-display text-lg shrink-0">
-                  {testimonial.name.charAt(0)}
-                </div>
+              <div className="h-full p-8 md:p-10 rounded-3xl bg-white/[0.02] border border-white/5 relative group hover:bg-white/[0.04] hover:border-white/15 transition-all duration-300 flex flex-col justify-between shadow-xl min-h-[300px]">
                 <div>
-                  <h5 className="font-medium text-foreground">{testimonial.name}</h5>
-                  <p className="text-xs text-foreground/50 uppercase tracking-widest mt-1">{testimonial.designation}</p>
+                  {/* Rating Stars */}
+                  <div className="flex items-center gap-1 mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 text-accent fill-accent"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                      </svg>
+                    ))}
+                  </div>
+
+                  <p className="text-foreground/80 leading-relaxed font-light mb-8 text-base md:text-lg">
+                    &ldquo;{testimonial.quote}&rdquo;
+                  </p>
+                </div>
+
+                {/* Author Info */}
+                <div className="flex items-center gap-4 pt-6 border-t border-white/5">
+                  <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-bold font-display text-lg shrink-0">
+                    {testimonial.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h5 className="font-medium text-foreground text-base">
+                      {testimonial.name}
+                    </h5>
+                    <p className="text-xs text-foreground/50 uppercase tracking-widest mt-0.5">
+                      {testimonial.designation}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Pagination Dots */}
-      <div className="flex justify-center gap-3 mt-12 relative z-10">
-        {Array.from({ length: maxDots }).map((_, idx) => (
+      <div className="flex justify-center items-center gap-2.5 mt-10 relative z-10">
+        {Array.from({ length: total }).map((_, idx) => (
           <button
             key={idx}
-            onClick={() => {
-              setCurrentIndex(idx);
-              if (scrollRef.current) {
-                const isMobile = window.innerWidth < 768;
-                const itemWidth = scrollRef.current.children[0].clientWidth;
-                const gap = isMobile ? 24 : 32;
-                scrollRef.current.scrollTo({ left: idx * (itemWidth + gap), behavior: 'smooth' });
-              }
-            }}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              visualIndex === idx ? "bg-accent scale-125" : "bg-white/20 hover:bg-white/40"
+            onClick={() => goToSlide(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+            className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+              activeDotIndex === idx
+                ? "w-8 bg-accent"
+                : "w-2.5 bg-white/20 hover:bg-white/40"
             }`}
           />
         ))}

@@ -45,23 +45,34 @@ export default function About() {
             </p>
           </motion.div>
 
-          {/* Right Column: Leadership Image */}
+          {/* Right Column: Sunil Kadlag Portrait */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
             whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, delay: 0.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="relative h-[340px] sm:h-[420px] lg:h-[480px] w-full rounded-3xl overflow-hidden border border-white/10 group"
+            className="relative h-[440px] sm:h-[500px] lg:h-[560px] w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-b from-white/5 to-black/40 group"
           >
-            <div className="absolute inset-0 bg-white/5" />
             <Image 
-              src="/about/aboutus.png" 
-              alt="About Kadlag Investment"
+              src="/about/sunilkadlag.png" 
+              alt="Mr. Sunil Kadlag - Founder of Kadlag Investment"
               fill
-              className="object-cover object-center group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
+              className="object-cover object-top group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
+              priority
             />
             {/* Subtle gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+            
+            {/* Floating Glassmorphism Founder Badge */}
+            <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-between">
+              <div>
+                <h4 className="text-base font-display font-medium text-white">Mr. Sunil Kadlag</h4>
+                <p className="text-xs uppercase tracking-widest text-accent font-medium mt-0.5">Founder & Financial Visionary</p>
+              </div>
+              <div className="text-right hidden sm:block">
+                <span className="text-xs text-foreground/50 font-mono">Est. 1996</span>
+              </div>
+            </div>
           </motion.div>
 
         </div>
