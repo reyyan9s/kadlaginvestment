@@ -18,6 +18,11 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Kadlag Investment | Architecture of Wealth",
   description: "A world-class, futuristic, premium financial-services experience.",
+  icons: {
+    icon: "/logo/main_logo.png",
+    shortcut: "/logo/main_logo.png",
+    apple: "/logo/main_logo.png",
+  },
 };
 
 export default function RootLayout({
