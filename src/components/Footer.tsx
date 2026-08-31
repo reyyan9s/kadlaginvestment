@@ -68,10 +68,10 @@ export default function Footer() {
                 Contact
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
               </Link></li>
-              <li><a href="#" className="hover:text-accent transition-colors relative group w-fit">
+              <li><Link href="/privacy-policy" className="hover:text-accent transition-colors relative group w-fit">
                 Privacy Policy
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
-              </a></li>
+              </Link></li>
             </ul>
           </div>
 
