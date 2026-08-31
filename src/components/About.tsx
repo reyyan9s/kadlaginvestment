@@ -45,23 +45,23 @@ export default function About() {
             </p>
           </motion.div>
 
-          {/* Right Column: Founder Image */}
+          {/* Right Column: Leadership Image */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
             whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, delay: 0.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="relative h-[600px] lg:h-[800px] w-full rounded-3xl overflow-hidden border border-white/10 group"
+            className="relative h-[340px] sm:h-[420px] lg:h-[480px] w-full rounded-3xl overflow-hidden border border-white/10 group"
           >
             <div className="absolute inset-0 bg-white/5" />
             <Image 
-              src="/about/founder.jpg" 
-              alt="Founder of Kadlag Investment"
+              src="/about/aboutus.png" 
+              alt="About Kadlag Investment"
               fill
               className="object-cover object-center group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
             />
-            {/* Gradient overlay to ground the image */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80" />
+            {/* Subtle gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-70" />
           </motion.div>
 
         </div>

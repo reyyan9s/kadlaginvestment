@@ -78,34 +78,34 @@ export default function Services() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {SERVICES.map((service, idx) => (
             <motion.div 
               key={service.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: (idx % 3) * 0.15, ease: [0.21, 0.47, 0.32, 0.98] }}
-              className="group p-8 md:p-10 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/20 transition-all duration-500 relative flex flex-col justify-between"
+              transition={{ duration: 0.6, delay: (idx % 3) * 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="group p-6 md:p-7 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/20 transition-all duration-300 relative flex flex-col justify-between"
             >
-              <div className="mb-12">
-                <div className="w-16 h-16 rounded-full bg-accent/5 border border-accent/20 flex items-center justify-center text-accent mb-8 group-hover:bg-accent group-hover:text-black group-hover:scale-110 transition-all duration-500">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent mb-5 group-hover:bg-accent group-hover:text-black group-hover:scale-105 transition-all duration-300">
                   {service.icon}
                 </div>
-                <h3 className="text-2xl font-display font-medium text-foreground mb-4">
+                <h3 className="text-xl font-display font-medium text-foreground mb-2.5">
                   {service.title}
                 </h3>
-                <p className="text-foreground/60 font-light leading-relaxed">
+                <p className="text-foreground/60 font-light leading-relaxed text-xs md:text-sm line-clamp-3">
                   {service.description}
                 </p>
               </div>
 
               <Link 
                 href={`/services/${service.id}`}
-                className="mt-auto pt-8 border-t border-white/5 flex items-center text-accent font-medium text-sm tracking-widest uppercase cursor-pointer group-hover:text-white transition-colors duration-300"
+                className="mt-6 pt-4 border-t border-white/5 flex items-center text-accent font-medium text-xs tracking-widest uppercase cursor-pointer group-hover:text-white transition-colors duration-300"
               >
                 Read More 
-                <span className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300">
+                <span className="ml-1.5 transform group-hover:translate-x-1.5 transition-transform duration-300">
                   &rarr;
                 </span>
               </Link>

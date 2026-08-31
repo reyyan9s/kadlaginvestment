@@ -32,7 +32,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('/services/banner.png')` }}
         />
-        <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-black/55" />
         
         <div className="container mx-auto px-6 md:px-12 relative z-10 text-center max-w-5xl">
           {/* Breadcrumbs */}

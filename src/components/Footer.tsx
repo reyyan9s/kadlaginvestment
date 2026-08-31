@@ -2,6 +2,7 @@
 
 import { Phone, Clock, MapPin, ChevronUp } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -47,26 +48,26 @@ export default function Footer() {
           <div className="md:col-span-6 lg:col-span-3 lg:ml-auto">
             <h4 className="text-foreground font-semibold mb-8 uppercase tracking-wider text-sm font-display">Quick Links</h4>
             <ul className="flex flex-col gap-5 text-sm text-foreground/60 font-light">
-              <li><a href="#home" className="hover:text-accent transition-colors relative group w-fit">
+              <li><a href="/" className="hover:text-accent transition-colors relative group w-fit">
                 Home
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
               </a></li>
-              <li><a href="#about" className="hover:text-accent transition-colors relative group w-fit">
+              <li><a href="/about" className="hover:text-accent transition-colors relative group w-fit">
                 About us
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
               </a></li>
-              <li><a href="#services" className="hover:text-accent transition-colors relative group w-fit">
+              <li><a href="/services" className="hover:text-accent transition-colors relative group w-fit">
                 Services
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
               </a></li>
-              <li><a href="#" className="hover:text-accent transition-colors relative group w-fit">
+              <li><Link href="/sip-calculator" className="hover:text-accent transition-colors relative group w-fit">
                 SIP Calculation
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
-              </a></li>
-              <li><a href="#contact" className="hover:text-accent transition-colors relative group w-fit">
+              </Link></li>
+              <li><Link href="/contact" className="hover:text-accent transition-colors relative group w-fit">
                 Contact
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
-              </a></li>
+              </Link></li>
               <li><a href="#" className="hover:text-accent transition-colors relative group w-fit">
                 Privacy Policy
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full"></span>
