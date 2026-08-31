@@ -29,8 +29,8 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-black/75 backdrop-blur-md border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.6)] ${
-        scrolled ? "py-3" : "py-4 md:py-5"
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-white/80 backdrop-blur-md border-b border-black/10 shadow-[0_4px_24px_rgba(0,0,0,0.06)] ${
+        scrolled ? "py-3 bg-white/90" : "py-4 md:py-5"
       }`}
     >
       <div className="container mx-auto px-4 md:px-8 xl:px-12 flex items-center justify-between gap-4">
@@ -52,7 +52,7 @@ export default function Navbar() {
             <Link
               key={idx}
               href={link.href}
-              className="text-xs xl:text-sm font-medium text-foreground/80 hover:text-accent transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:bg-accent after:transition-all hover:after:w-full whitespace-nowrap"
+              className="text-xs xl:text-sm font-semibold text-black/80 hover:text-black transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-black after:transition-all hover:after:w-full whitespace-nowrap"
             >
               {link.label}
             </Link>
@@ -61,19 +61,19 @@ export default function Navbar() {
 
         {/* Right: Free Consultancy 24/7 Call Block */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
-          <div className="w-10 h-10 rounded-full bg-accent text-background flex items-center justify-center shrink-0 shadow-lg shadow-accent/20">
+          <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center shrink-0 shadow-md">
             <Phone size={18} className="fill-current" />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-[11px] uppercase tracking-wider text-foreground/60 font-medium">
+            <span className="text-[11px] uppercase tracking-wider text-black/60 font-medium">
               Free Consultancy - 24/7
             </span>
-            <div className="text-xs xl:text-sm font-bold text-foreground font-display flex items-center gap-1.5">
-              <a href="tel:+919150306306" className="hover:text-accent transition-colors">
+            <div className="text-xs xl:text-sm font-bold text-black font-display flex items-center gap-1.5">
+              <a href="tel:+919150306306" className="hover:opacity-75 transition-opacity">
                 +91- 9150306306
               </a>
-              <span className="text-foreground/40">,</span>
-              <a href="tel:+919422840886" className="hover:text-accent transition-colors">
+              <span className="text-black/40">,</span>
+              <a href="tel:+919422840886" className="hover:opacity-75 transition-opacity">
                 +91- 9422840886
               </a>
             </div>
@@ -82,7 +82,7 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <button
-          className="lg:hidden text-foreground hover:text-accent transition-colors p-1"
+          className="lg:hidden text-black hover:opacity-75 transition-opacity p-1"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle Menu"
         >
@@ -97,28 +97,28 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl border-t border-white/10 flex flex-col p-6 gap-5 lg:hidden shadow-2xl"
+            className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-black/10 flex flex-col p-6 gap-5 lg:hidden shadow-2xl"
           >
             {NAV_LINKS.map((link, idx) => (
               <Link
                 key={idx}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-medium text-foreground hover:text-accent transition-colors py-1"
+                className="text-base font-semibold text-black/90 hover:text-black transition-colors py-1"
               >
                 {link.label}
               </Link>
             ))}
 
-            <div className="pt-4 border-t border-white/10 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-accent text-background flex items-center justify-center shrink-0">
+            <div className="pt-4 border-t border-black/10 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center shrink-0">
                 <Phone size={18} className="fill-current" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-foreground/60">Free Consultancy - 24/7</span>
-                <div className="text-sm font-semibold text-foreground flex flex-col">
-                  <a href="tel:+919150306306" className="hover:text-accent transition-colors">+91- 9150306306</a>
-                  <a href="tel:+919422840886" className="hover:text-accent transition-colors">+91- 9422840886</a>
+                <span className="text-xs text-black/60">Free Consultancy - 24/7</span>
+                <div className="text-sm font-bold text-black flex flex-col">
+                  <a href="tel:+919150306306" className="hover:opacity-75 transition-opacity">+91- 9150306306</a>
+                  <a href="tel:+919422840886" className="hover:opacity-75 transition-opacity">+91- 9422840886</a>
                 </div>
               </div>
             </div>
