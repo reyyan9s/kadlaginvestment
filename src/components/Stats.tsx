@@ -2,47 +2,29 @@
 
 import { motion, useInView, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { Users2, Clock, Landmark } from "lucide-react";
 
 const STATS = [
   { 
     num: 2.0, 
-    suffix: "K",
-    label: "Satisfied Clients",
-    // Jumping person / User icon
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-        <circle cx="9" cy="7" r="4"></circle>
-        <polyline points="16 11 18 13 22 9"></polyline>
-      </svg>
-    )
+    suffix: "K+",
+    label: "Empowered Investors",
+    sub: "High Net Worth & Retail Clients",
+    icon: <Users2 className="w-7 h-7" />
   },
   { 
     num: 27, 
-    suffix: "",
-    label: "Years Of Experience",
-    // Rocket icon
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
-        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
-        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
-        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
-      </svg>
-    )
+    suffix: "+",
+    label: "Years Fiduciary Trust",
+    sub: "Founded in June 1996",
+    icon: <Clock className="w-7 h-7" />
   },
   { 
     num: 110, 
-    suffix: "Cr",
-    label: "Portfolio",
-    // Target / Bullseye icon
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <circle cx="12" cy="12" r="6"></circle>
-        <circle cx="12" cy="12" r="2"></circle>
-      </svg>
-    )
+    suffix: " Cr+",
+    label: "Assets Advised",
+    sub: "Multi-Asset Class Portfolios",
+    icon: <Landmark className="w-7 h-7" />
   },
 ];
 
@@ -55,7 +37,7 @@ function AnimatedNumber({ value, suffix }: { value: number; suffix: string }) {
     if (isInView) {
       const controls = animate(0, value, {
         duration: 2.5,
-        ease: [0.21, 0.47, 0.32, 0.98], // Cinematic ease out
+        ease: [0.21, 0.47, 0.32, 0.98],
         onUpdate(v) {
           setDisplayValue(v);
         }
@@ -64,7 +46,6 @@ function AnimatedNumber({ value, suffix }: { value: number; suffix: string }) {
     }
   }, [isInView, value]);
 
-  // Format: if it's a decimal (like 2.0), keep 1 decimal place. Otherwise floor it.
   const isDecimal = value % 1 !== 0 || value === 2.0; 
   const formattedValue = isDecimal 
     ? displayValue.toFixed(1) 
@@ -79,42 +60,56 @@ function AnimatedNumber({ value, suffix }: { value: number; suffix: string }) {
 
 export default function Stats() {
   return (
-    <section id="performance" className="pt-4 lg:pt-8 pb-12 lg:pb-16 bg-background relative z-20">
+    <section id="performance" className="py-16 md:py-24 bg-background relative z-20 overflow-hidden">
       
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="bg-white/[0.02] border border-white/10 p-8 md:p-16 rounded-3xl max-w-6xl mx-auto shadow-2xl relative overflow-hidden">
-          
-          {/* Subtle noise/glow inside the panel */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(197,168,128,0.05)_0%,transparent_70%)]" />
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-64 bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative z-10">
-            {STATS.map((stat, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: idx * 0.15, type: "spring", stiffness: 100 }}
-                className="flex flex-col items-center text-center group"
-              >
-                {/* Icon wrapper */}
-                <div className="w-20 h-20 mb-6 rounded-full bg-accent/5 border border-accent/20 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-black group-hover:scale-110 transition-all duration-500 shadow-[0_0_15px_rgba(197,168,128,0.1)] group-hover:shadow-[0_0_30px_rgba(197,168,128,0.4)]">
-                  {stat.icon}
-                </div>
-                
-                {/* Massive Animated Number */}
-                <div className="text-6xl md:text-7xl font-display font-bold text-white mb-2 tracking-tighter">
-                  <AnimatedNumber value={stat.num} suffix={stat.suffix} />
-                </div>
-                
-                {/* Label */}
-                <h4 className="text-lg md:text-xl font-medium text-foreground/80 tracking-wide uppercase">
-                  {stat.label}
-                </h4>
-              </motion.div>
-            ))}
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
+        
+        {/* Double-Bezel Outer Hardware Shell */}
+        <div className="p-2 rounded-[2.5rem] bg-gradient-to-b from-white/10 via-white/5 to-transparent border border-white/10 shadow-2xl max-w-6xl mx-auto">
+          
+          {/* Inner Core Container */}
+          <div className="p-8 md:p-14 rounded-[calc(2.5rem-8px)] bg-[#0a0a0c]/95 backdrop-blur-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] relative overflow-hidden">
+            
+            {/* Subtle radial sheen */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(197,168,128,0.08)_0%,transparent_70%)] pointer-events-none" />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 relative z-10 divide-y md:divide-y-0 md:divide-x divide-white/10">
+              {STATS.map((stat, idx) => (
+                <motion.div 
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: idx * 0.15, ease: [0.21, 0.47, 0.32, 0.98] }}
+                  className={`flex flex-col items-center text-center group ${idx > 0 ? "pt-8 md:pt-0 md:pl-8" : ""}`}
+                >
+                  {/* Icon wrapper */}
+                  <div className="w-14 h-14 mb-6 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-black group-hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(197,168,128,0.15)]">
+                    {stat.icon}
+                  </div>
+                  
+                  {/* Massive Animated Number */}
+                  <div className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-2 tracking-tighter drop-shadow-md">
+                    <AnimatedNumber value={stat.num} suffix={stat.suffix} />
+                  </div>
+                  
+                  {/* Label */}
+                  <h4 className="text-base md:text-lg font-medium text-foreground tracking-wide font-display">
+                    {stat.label}
+                  </h4>
+                  <p className="text-xs text-foreground/50 mt-1 font-light">
+                    {stat.sub}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
           </div>
         </div>
+
       </div>
     </section>
   );

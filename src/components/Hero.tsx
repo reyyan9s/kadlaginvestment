@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ArrowUpRight, Phone, ShieldCheck, TrendingUp, Award } from "lucide-react";
+import Link from "next/link";
 
 const IMAGES = [
   "/hero/first.png",
@@ -11,11 +13,18 @@ const IMAGES = [
 
 export default function Hero() {
   const comp = useRef(null);
-  const imagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
       // 1. Text Entry Animations
+      gsap.from(".hero-badge", {
+        y: -30,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: 0.1
+      });
+
       gsap.from(".hero-title span", {
         y: 100,
         opacity: 0,
@@ -24,28 +33,26 @@ export default function Hero() {
         ease: "power4.out",
         delay: 0.2
       });
+
       gsap.from(".hero-sub", {
         opacity: 0,
         y: 20,
         duration: 1,
-        delay: 0.8,
+        delay: 0.7,
         ease: "power2.out"
       });
-      
-      // 2. Initial Image Scale
-      gsap.from(".hero-img-container", {
-        scale: 1.05,
+
+      gsap.from(".hero-chips", {
         opacity: 0,
-        duration: 1.5,
-        delay: 0.3,
+        y: 30,
+        duration: 1,
+        delay: 0.9,
         ease: "power3.out"
       });
 
-      // 3. Infinite Sliding Animation (Track Method with Clone)
+      // 2. Infinite Sliding Animation (Track Method with Clone)
       const tl = gsap.timeline({ repeat: -1 });
       
-      // We have 4 images in the track (3 real + 1 clone of the first).
-      // The track is 400% width. We move the track left by 25% for each slide.
       tl.to(".hero-slider-track", { xPercent: -25, duration: 1.2, ease: "power3.inOut", delay: 4 })
         .to(".hero-slider-track", { xPercent: -50, duration: 1.2, ease: "power3.inOut", delay: 4 })
         .to(".hero-slider-track", { xPercent: -75, duration: 1.2, ease: "power3.inOut", delay: 4 })
@@ -86,35 +93,50 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      {/* Very subtle gradient just behind text for legibility, removing the heavy filters */}
-      <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/80 via-transparent to-transparent h-1/2 mt-auto" />
 
-      <div className="absolute bottom-12 left-0 right-0 z-30 w-full">
+      {/* Subtle bottom gradient for text legibility */}
+      <div className="absolute bottom-0 left-0 right-0 h-2/3 z-20 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+
+      <div className="absolute bottom-10 md:bottom-14 left-0 right-0 z-30 w-full">
         <div className="container mx-auto px-6 md:px-12 max-w-[1400px]">
-          {/* Overlapping Text Container positioned at absolute bottom */}
+          
           <div className="max-w-3xl">
             
-            <h1 className="hero-title text-[clamp(4rem,7vw,8rem)] font-display font-medium tracking-tighter leading-[1.1] mb-8 overflow-hidden w-full drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)] text-white">
+            {/* Trust Badge */}
+            <div className="hero-badge inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-[11px] text-foreground/90 font-medium mb-4 shadow-lg">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="text-accent font-semibold">AMFI Certified</span>
+              <span className="text-white/40">&bull;</span>
+              <span>27+ Years Fiduciary Legacy</span>
+            </div>
+
+            <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-display font-medium tracking-tight leading-[1.1] mb-6 overflow-hidden w-full drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)] text-white">
               <span className="block">Engineered</span>
-              <span className="block italic text-white/90">for scale.</span>
+              <span className="block italic text-gradient">for scale.</span>
             </h1>
 
-            <div className="hero-sub text-lg text-white/90 font-light flex flex-col sm:flex-row gap-6 max-w-xl">
-              <a 
-                href="#services" 
-                className="px-8 py-4 bg-white text-black font-semibold hover:bg-white/90 transition-colors text-center"
+            {/* Action Buttons */}
+            <div className="hero-sub flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+              <Link 
+                href="/services" 
+                className="group px-5 py-3 rounded-full bg-accent text-black font-semibold text-xs sm:text-sm hover:bg-accent-light transition-all flex items-center justify-between sm:justify-center gap-3 shadow-lg shadow-accent/20 active:scale-[0.98]"
               >
-                Explore Services
-              </a>
-              <a 
-                href="#contact" 
-                className="px-8 py-4 border border-white/50 text-white hover:bg-white/20 transition-colors text-center backdrop-blur-sm shadow-xl"
+                <span>Explore Solutions</span>
+                <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+                  <ArrowUpRight size={14} className="text-black" />
+                </div>
+              </Link>
+
+              <Link 
+                href="/contact" 
+                className="px-5 py-3 rounded-full border border-white/25 text-white hover:bg-white/10 transition-all text-xs sm:text-sm font-medium text-center backdrop-blur-md flex items-center justify-center gap-2 active:scale-[0.98]"
               >
-                Initiate Contact
-              </a>
+                <Phone size={14} className="text-accent" />
+                Schedule Advisory Session
+              </Link>
             </div>
-            
           </div>
+
         </div>
       </div>
     </section>

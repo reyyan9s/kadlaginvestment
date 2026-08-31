@@ -147,7 +147,7 @@ export default function AboutPage() {
                   <p className="text-xs text-foreground/60 uppercase tracking-wider mt-1">AMFI Certified</p>
                 </div>
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 col-span-2 sm:col-span-1">
-                  <p className="text-2xl font-bold font-display text-accent">28+ Yrs</p>
+                  <p className="text-2xl font-bold font-display text-accent">27+ Yrs</p>
                   <p className="text-xs text-foreground/60 uppercase tracking-wider mt-1">Fiduciary Trust</p>
                 </div>
               </div>
