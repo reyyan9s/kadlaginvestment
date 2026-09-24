@@ -6,9 +6,10 @@ import { ArrowUpRight, Phone, ShieldCheck, TrendingUp, Award } from "lucide-reac
 import Link from "next/link";
 
 const IMAGES = [
-  "/hero/first.png",
-  "/hero/second.png",
-  "/hero/third.png"
+  "/hero/banner1.jpg",
+  "/hero/banner2.jpg",
+  "/hero/banner3.jpg",
+  "/hero/banner4.jpg"
 ];
 
 export default function Hero() {
@@ -50,12 +51,13 @@ export default function Hero() {
         ease: "power3.out"
       });
 
-      // 2. Infinite Sliding Animation (Track Method with Clone)
+      // 2. Infinite Sliding Animation (Track Method with Clone: 5 panels = 20% each)
       const tl = gsap.timeline({ repeat: -1 });
       
-      tl.to(".hero-slider-track", { xPercent: -25, duration: 1.2, ease: "power3.inOut", delay: 4 })
-        .to(".hero-slider-track", { xPercent: -50, duration: 1.2, ease: "power3.inOut", delay: 4 })
-        .to(".hero-slider-track", { xPercent: -75, duration: 1.2, ease: "power3.inOut", delay: 4 })
+      tl.to(".hero-slider-track", { xPercent: -20, duration: 1.2, ease: "power3.inOut", delay: 4 })
+        .to(".hero-slider-track", { xPercent: -40, duration: 1.2, ease: "power3.inOut", delay: 4 })
+        .to(".hero-slider-track", { xPercent: -60, duration: 1.2, ease: "power3.inOut", delay: 4 })
+        .to(".hero-slider-track", { xPercent: -80, duration: 1.2, ease: "power3.inOut", delay: 4 })
         .set(".hero-slider-track", { xPercent: 0 }); // instant reset to start
 
     }, comp);
@@ -68,26 +70,26 @@ export default function Hero() {
       
       {/* Full Bleed Image Background Track */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="hero-slider-track flex w-[400%] h-full">
-          {/* Original 3 images */}
+        <div className="hero-slider-track flex w-[500%] h-full">
+          {/* 4 images */}
           {IMAGES.map((src, idx) => (
-            <div key={idx} className="w-1/4 h-full relative overflow-hidden">
+            <div key={idx} className="w-1/5 h-full relative overflow-hidden">
               <div 
                 className="absolute inset-0 bg-cover bg-no-repeat scale-[1.05]"
                 style={{ 
                   backgroundImage: `url('${src}')`,
-                  backgroundPosition: idx === 1 ? "center 80px" : "center top" 
+                  backgroundPosition: idx === 0 ? "center 80px" : idx === 3 ? "center 45px" : "center center" 
                 }}
               />
             </div>
           ))}
           {/* Clone of the first image for seamless looping */}
-          <div className="w-1/4 h-full relative overflow-hidden">
+          <div className="w-1/5 h-full relative overflow-hidden">
             <div 
               className="absolute inset-0 bg-cover bg-no-repeat scale-[1.05]"
               style={{ 
                 backgroundImage: `url('${IMAGES[0]}')`,
-                backgroundPosition: "center top"
+                backgroundPosition: "center 80px"
               }}
             />
           </div>
